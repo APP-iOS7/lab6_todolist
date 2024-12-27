@@ -19,7 +19,7 @@ function addTodo(text, checked = false) {
 
   // 텍스트
   const spanElement = document.createElement("span");
-  spanElement.classList("ms-2", "flex-grow-1");
+  spanElement.classList.add("ms-2", "flex-grow-1");
   spanElement.textContent = text;
 
   spanElement.style.textDecoration = checkbox.checked ? "line-through" : "none";
@@ -39,14 +39,12 @@ function addTodo(text, checked = false) {
   const deleteButton = document.createElement("button");
   deleteButton.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
   deleteButton.textContent = "삭제";
-  deleteButton.addEventListener("click", () => {
-    deleteTodos();
-  });
+  deleteButton.addEventListener("click", deleteTodos);
 
   li.prepend(checkbox);
   li.append(spanElement);
   li.append(deleteButton);
-  document.getElementById("").append(li);
+  todoListElement.append(li);
 }
 
 function readTodos() {
