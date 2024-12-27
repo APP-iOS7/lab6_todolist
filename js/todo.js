@@ -2,7 +2,7 @@ const todoListElement = document.getElementById("todoList");
 const addBtn = document.getElementById("addBtn");
 const todoInput = document.getElementById("todoInput");
 
-function addTodo(text, checked = false) {
+function addTodo(text, checked = false, date = null) {
   const li = document.createElement("li");
   li.classList.add(
     "list-group-item",
@@ -24,6 +24,18 @@ function addTodo(text, checked = false) {
 
   spanElement.style.textDecoration = checkbox.checked ? "line-through" : "none";
 
+  // 현재 날짜와 시간
+  const now = date ? new Date(date) : new Date(); // 전달된 날짜가 없으면 현재 날짜 사용
+  const formattedDate = formatDate(now);
+
+  // 날짜 표시
+  const dateSpan = document.createElement("span");
+  dateSpan.classList.add("text-muted", "ms-3");
+  dateSpan.textContent = formattedDate;
+
+  dateSpan.style.color = "#6c757d"; // 회색
+  dateSpan.style.fontSize = "0.85rem"; // 작은 글씨
+
   // 체크박스 클릭시 처리
   checkbox.addEventListener("change", () => {
     li.style.textDecoration = checkbox.checked ? "line-through" : "none";
@@ -32,6 +44,7 @@ function addTodo(text, checked = false) {
     const todos = loadTodos();
     const index = Array.from(li.parentElement.children).indexOf(li);
     todos[index].checked = checkbox.checked;
+    todos[index].date = now.toISOString();
     saveTodos(todos);
   });
 
@@ -44,6 +57,7 @@ function addTodo(text, checked = false) {
   });
   li.prepend(checkbox);
   li.append(spanElement);
+  li.append(dateSpan);
   li.append(deleteButton);
   todoListElement.append(li);
 }
@@ -73,16 +87,35 @@ function deleteTodos(li, checkbox) {
   li.remove();
 }
 
+function formatDate(date) {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+
+  if (date >= today) {
+    return "오늘";
+  } else if (date >= yesterday) {
+    return "어제";
+  }
+
+  const year = date.getFullYear().toString().slice(-2); // 연도 마지막 두 자리
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}/${month}/${day}`;
+}
+
 function main() {
   const todos = readTodos();
   todos.forEach((todo) => {
-    addTodo(todo.text, todos.checked);
+    addTodo(todo.text, todo.checked, todo.date);
   });
 
   addBtn.addEventListener("click", () => {
     if (todoInput.value.trim() === "") return; // 빈 입력 방지
 
-    addTodo(todoInput.value);
+    addTodo(todoInput.text);
 
     readTodos(todoInput.value);
     todos.push({ text: todoInput.value, checked: false });
