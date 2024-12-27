@@ -39,8 +39,9 @@ function addTodo(text, checked = false) {
   const deleteButton = document.createElement("button");
   deleteButton.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
   deleteButton.textContent = "삭제";
-  deleteButton.addEventListener("click", deleteTodos);
-
+  deleteButton.addEventListener("click", () => {
+    deleteTodos(li, checkbox); // li를 매개변수로 전달
+  });
   li.prepend(checkbox);
   li.append(spanElement);
   li.append(deleteButton);
@@ -64,9 +65,9 @@ function readAndLogTodos() {
   });
 }
 
-function deleteTodos() {
+function deleteTodos(li, checkbox) {
   const todos = readTodos();
-  const index = Array.from(FileList.parentElement.children).indexOf(li);
+  const index = Array.from(li.parentElement.children).indexOf(li);
   todos[index].checked = checkbox.checked;
 
   li.remove();
