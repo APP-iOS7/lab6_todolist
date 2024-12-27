@@ -1,8 +1,9 @@
 const todoListElement = document.getElementById("todoList");
 const addBtn = document.getElementById("addBtn");
+const searchBtn = document.getElementById("searchBtn");
 const todoInput = document.getElementById("todoInput");
 
-function addTodo(text, checked = false, date = null) {
+function addTodo(text, checked = false, date = null, elementIndex = null) {
   const li = document.createElement("li");
   li.classList.add(
     "list-group-item",
@@ -21,12 +22,7 @@ function addTodo(text, checked = false, date = null) {
   const spanElement = document.createElement("span");
   spanElement.classList.add("ms-2", "flex-grow-1");
   spanElement.textContent = text;
-
-  const textInput = document.createElement("input");
-  textInput.type = "text";
-  textInput.value = text;
-  textInput.disabled = true;
-
+  
   spanElement.style.textDecoration = checkbox.checked ? "line-through" : "none";
 
   // 현재 날짜와 시간
@@ -47,7 +43,8 @@ function addTodo(text, checked = false, date = null) {
 
     // localStorage 업데이트
     const todos = readTodos();
-    const index = Array.from(li.parentElement.children).indexOf(li);
+    // ul index
+    const index = elementIndex === null ? Array.from(li.parentElement.children).indexOf(li) : elementIndex;
     todos[index].checked = checkbox.checked;
     todos[index].date = now.toISOString();
     saveTodos(todos);
@@ -58,7 +55,8 @@ function addTodo(text, checked = false, date = null) {
   deleteButton.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
   deleteButton.textContent = "삭제";
   deleteButton.addEventListener("click", () => {
-    deleteTodos(li, checkbox); // li를 매개변수로 전달
+    const index = elementIndex === null ? Array.from(li.parentElement.children).indexOf(li) : elementIndex;
+    deleteTodos(index, li); // index를 매개변수로 전달
   });
 
   // 수정 버튼
@@ -66,7 +64,8 @@ function addTodo(text, checked = false, date = null) {
   updateButton.classList.add("btn", "btn-info", "btn-sm", "ms-2");
   updateButton.textContent = "수정";
   updateButton.addEventListener("click", () => {
-    updateTodos(li, spanElement);
+    const index = elementIndex === null ? Array.from(li.parentElement.children).indexOf(li) : elementIndex;
+    updateTodos(index, spanElement);
   });
 
   li.prepend(checkbox);
@@ -84,20 +83,10 @@ function readTodos() {
 
 function saveTodos(todos) {
   localStorage.setItem("todoList", JSON.stringify(todos));
-  console.log(todos);
 }
 
-// todos를 읽어오고 콘솔에 출력하는 함수
-function readAndLogTodos() {
+function deleteTodos(index, li) {
   const todos = readTodos();
-  todos.forEach((todo, index) => {
-    console.log(`${index + 1}번: ${todo}`);
-  });
-}
-
-function deleteTodos(li, checkbox) {
-  const todos = readTodos();
-  const index = Array.from(li.parentElement.children).indexOf(li);
   todos.splice(index, 1);
   saveTodos(todos);
   li.remove();
@@ -122,9 +111,8 @@ function formatDate(date) {
   return `${year}/${month}/${day}`;
 }
 
-function updateTodos(li, spanElement) {
+function updateTodos(index, spanElement) {
   const todos = readTodos();
-  const index = Array.from(li.parentElement.children).indexOf(li);
 
   const myModal = new bootstrap.Modal(document.getElementById("myModal"));
   document.getElementById("updateText").value = todos[index].text;
@@ -134,7 +122,6 @@ function updateTodos(li, spanElement) {
     const updateText = document.getElementById("updateText").value;
     todos[index].text = updateText;
     spanElement.textContent = updateText;
-    console.log(todos[index].value);
     saveTodos(todos);
     myModal.hide();
   });
@@ -157,6 +144,21 @@ function main() {
 
     // 입력창 비우기
     todoInput.value = "";
+  });
+
+  // 검색
+  searchBtn.addEventListener("click", () => {
+    const search = document.getElementById("searchInput").value;
+    const todos = readTodos();
+
+    todoListElement.innerHTML = "";
+
+    todos.forEach((todo, index) => {
+      if (todo.text.includes(search)) {
+        console.log(index);
+        addTodo(todo.text, todo.checked, todo.date, index);
+      }
+    });
   });
 }
 
