@@ -22,6 +22,11 @@ function addTodo(text, checked = false, date = null) {
   spanElement.classList.add("ms-2", "flex-grow-1");
   spanElement.textContent = text;
 
+  const textInput = document.createElement("input");
+  textInput.type = "text";
+  textInput.value = text;
+  textInput.disabled = true;
+
   spanElement.style.textDecoration = checkbox.checked ? "line-through" : "none";
 
   // 현재 날짜와 시간
@@ -41,7 +46,7 @@ function addTodo(text, checked = false, date = null) {
     li.style.textDecoration = checkbox.checked ? "line-through" : "none";
 
     // localStorage 업데이트
-    const todos = loadTodos();
+    const todos = readTodos();
     const index = Array.from(li.parentElement.children).indexOf(li);
     todos[index].checked = checkbox.checked;
     todos[index].date = now.toISOString();
@@ -55,9 +60,19 @@ function addTodo(text, checked = false, date = null) {
   deleteButton.addEventListener("click", () => {
     deleteTodos(li, checkbox); // li를 매개변수로 전달
   });
+
+  // 수정 버튼
+  const updateButton = document.createElement("button");
+  updateButton.classList.add("btn", "btn-info", "btn-sm", "ms-2");
+  updateButton.textContent = "수정";
+  updateButton.addEventListener("click", () => {
+    updateTodos(li, spanElement);
+  });
+
   li.prepend(checkbox);
   li.append(spanElement);
   li.append(dateSpan);
+  li.append(updateButton);
   li.append(deleteButton);
   todoListElement.append(li);
 }
@@ -69,6 +84,7 @@ function readTodos() {
 
 function saveTodos(todos) {
   localStorage.setItem("todoList", JSON.stringify(todos));
+  console.log(todos);
 }
 
 // todos를 읽어오고 콘솔에 출력하는 함수
@@ -82,8 +98,8 @@ function readAndLogTodos() {
 function deleteTodos(li, checkbox) {
   const todos = readTodos();
   const index = Array.from(li.parentElement.children).indexOf(li);
-  todos[index].checked = checkbox.checked;
-
+  todos.splice(index, 1);
+  saveTodos(todos);
   li.remove();
 }
 
@@ -104,6 +120,24 @@ function formatDate(date) {
   const day = String(date.getDate()).padStart(2, "0");
 
   return `${year}/${month}/${day}`;
+}
+
+function updateTodos(li, spanElement) {
+  const todos = readTodos();
+  const index = Array.from(li.parentElement.children).indexOf(li);
+
+  const myModal = new bootstrap.Modal(document.getElementById("myModal"));
+  document.getElementById("updateText").value = todos[index].text;
+  myModal.show();
+
+  document.getElementById("updateOK").addEventListener("click", () => {
+    const updateText = document.getElementById("updateText").value;
+    todos[index].text = updateText;
+    spanElement.textContent = updateText;
+    console.log(todos[index].value);
+    saveTodos(todos);
+    myModal.hide();
+  });
 }
 
 function main() {
