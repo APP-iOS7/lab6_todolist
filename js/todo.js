@@ -43,7 +43,9 @@ function addTodo(text, checked = false, date = null) {
 
   // 체크박스 클릭시 처리
   checkbox.addEventListener("change", () => {
-    li.style.textDecoration = checkbox.checked ? "line-through" : "none";
+    spanElement.style.textDecoration = checkbox.checked
+      ? "line-through"
+      : "none";
 
     // localStorage 업데이트
     const todos = readTodos();
@@ -56,7 +58,13 @@ function addTodo(text, checked = false, date = null) {
   // 삭제 버튼
   const deleteButton = document.createElement("button");
   deleteButton.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
-  deleteButton.textContent = "삭제";
+  const deleteImg = document.createElement("img");
+  deleteImg.src = "../image/delete.png";
+  deleteImg.alt = "Delete";
+  deleteImg.style.width = "20px";
+  deleteImg.style.height = "20px";
+  deleteButton.appendChild(deleteImg);
+
   deleteButton.addEventListener("click", () => {
     deleteTodos(li, checkbox); // li를 매개변수로 전달
   });
@@ -64,7 +72,13 @@ function addTodo(text, checked = false, date = null) {
   // 수정 버튼
   const updateButton = document.createElement("button");
   updateButton.classList.add("btn", "btn-info", "btn-sm", "ms-2");
-  updateButton.textContent = "수정";
+  const updateImage = document.createElement("img");
+  updateImage.src = "../image/edit.png";
+  updateImage.alt = "Edit";
+  updateImage.style.width = "20px";
+  updateImage.style.height = "20px";
+  updateButton.appendChild(updateImage);
+
   updateButton.addEventListener("click", () => {
     updateTodos(li, spanElement);
   });
@@ -87,15 +101,7 @@ function saveTodos(todos) {
   console.log(todos);
 }
 
-// todos를 읽어오고 콘솔에 출력하는 함수
-function readAndLogTodos() {
-  const todos = readTodos();
-  todos.forEach((todo, index) => {
-    console.log(`${index + 1}번: ${todo}`);
-  });
-}
-
-function deleteTodos(li, checkbox) {
+function deleteTodos(li) {
   const todos = readTodos();
   const index = Array.from(li.parentElement.children).indexOf(li);
   todos.splice(index, 1);
@@ -142,18 +148,26 @@ function updateTodos(li, spanElement) {
 
 function main() {
   const todos = readTodos();
-  todos.forEach((todo) => {
+
+  const sortedTodos = todos.sort((a, b) => a.checked - b.checked);
+
+  sortedTodos.forEach((todo) => {
     addTodo(todo.text, todo.checked, todo.date);
   });
 
   addBtn.addEventListener("click", () => {
     if (todoInput.value.trim() === "") return; // 빈 입력 방지
 
-    addTodo(todoInput.text);
+    const newTodo = {
+      text: todoInput.value,
+      checked: false,
+      date: new Date().toISOString(), // 현재 날짜 저장
+    };
+    todos.push(newTodo);
 
-    readTodos(todoInput.value);
-    todos.push({ text: todoInput.value, checked: false });
     saveTodos(todos);
+
+    addTodo(newTodo.text, newTodo.checked, newTodo.date); // 화면에 추가
 
     // 입력창 비우기
     todoInput.value = "";

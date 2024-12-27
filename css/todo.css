@@ -1,23 +1,25 @@
 body {
-  background-color: #f8f9fa;
+  background-color: #eef2f7;
 }
-.navbar {
-  padding: 1rem;
-}
+
 .navbar-brand {
   font-size: 1.5rem;
   font-weight: bold;
   text-align: center;
+  color: #ffffff;
 }
+
 .input-group {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
   overflow: hidden;
 }
+
 #todoInput {
   border: none;
   outline: none;
 }
+
 .list-group-item {
   display: flex;
   justify-content: space-between;
@@ -29,14 +31,85 @@ body {
   background: #ffffff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
-.btn-delete {
-  color: #dc3545;
-  font-size: 0.9rem;
+
+#updateDeleteBtn {
+  display: flex;
+  width: 150px;
+  background-color: #dfe6e9;
   border: none;
-  background: none;
-  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease-in-out;
+}
+
+#updateDeleteBtn:hover {
+  background-color: #b2bec3;
+  transform: scale(1.05);
+}
+
+#updateDeleteBtn:focus {
+  outline: none;
+}
+
+#updateDeleteBtn .left-btn,
+#updateDeleteBtn .right-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  padding: 8px;
   cursor: pointer;
 }
-.btn-delete:hover {
-  color: #bd2130;
+
+#updateDeleteBtn .left-btn {
+  border-right: 1px solid #b2bec3;
+  color: #00cec9;
+}
+
+#updateDeleteBtn .right-btn {
+  color: #ff7675;
+}
+
+#updateDeleteBtn .left-btn:hover {
+  background-color: #00b894;
+}
+
+#updateDeleteBtn .right-btn:hover {
+  background-color: #d63031;
+}
+
+#addBtn {
+  border: none;
+  background-color: transparent;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+#addBtn img {
+  width: 24px;
+  height: 24px;
+}
+
+#addBtn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+#addBtn:focus {
+  outline: none;
+}
+
+.btn {
+  background-color: #dfe6e9;
+  border-color: #b2bec3;
+  transition: background-color 0.2s ease, transform 0.2s ease-in-out;
+}
+
+.btn:hover {
+  background-color: #b2bec3;
+  transform: scale(1.05);
+}
+
+.btn:focus {
+  outline: none;
 }
