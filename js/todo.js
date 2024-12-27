@@ -1,21 +1,34 @@
+const todoListElement = document.getElementById('todoList');
+const addBtn = document.getElementById("addBtn");
+const todoInput = document.getElementById('todoInput');
+
 function addTodo(text, checked = false) {
     const li = document.createElement('li');
+    li.classList.add('list-group-item', 'd-flex', 'align-items-center', 'justify-content-between');
 
     // 체크박스
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
-    checkbox.classList.add('');
+    checkbox.classList.add('form-check-input');
     checkbox.checked = checked;
 
     // 텍스트
     const spanElement = document.createElement('span');
-    spanElement.classList('');
+    spanElement.classList('ms-2', 'flex-grow-1');
     spanElement.textContent = text;
 
     spanElement.style.textDecoration = checkbox.checked ? 'line-through' : 'none';
 
-    // 체크박스 이벤트
-    checkbox.addEventListener('change', () => {});
+    // 체크박스 클릭시 처리
+  checkbox.addEventListener('change', () => {
+    li.style.textDecoration = checkbox.checked ? 'line-through' : 'none';
+    
+    // localStorage 업데이트
+    const todos = loadTodos();
+    const index = Array.from(li.parentElement.children).indexOf(li);
+    todos[index].checked = checkbox.checked;
+    saveTodos(todos);
+  });
 
     // 삭제 버튼
     const deleteButton = document.createElement('button');
@@ -34,7 +47,7 @@ function saveTodos(todos) {
     localStorage.setItem('todoList', JSON.stringify(todos));
 }
 
-const addBtn = document.getElementById("addBtn");
+
 
 function readTodos() {
   const savedTodos = localStorage.getItem("todoList");
