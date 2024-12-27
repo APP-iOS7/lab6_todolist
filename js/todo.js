@@ -42,13 +42,6 @@ function addTodo(text, checked = false) {
     document.getElementById('').append(li);
 }
 
-// 데이터 저장
-function saveTodos(todos) {
-    localStorage.setItem('todoList', JSON.stringify(todos));
-}
-
-
-
 function readTodos() {
   const savedTodos = localStorage.getItem("todoList");
   return savedTodos ? JSON.parse(savedTodos) : [];
