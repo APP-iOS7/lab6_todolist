@@ -22,7 +22,7 @@ function addTodo(text, checked = false, date = null, elementIndex = null) {
   const spanElement = document.createElement("span");
   spanElement.classList.add("ms-2", "flex-grow-1");
   spanElement.textContent = text;
-
+  
   spanElement.style.textDecoration = checkbox.checked ? "line-through" : "none";
 
   // 현재 날짜와 시간
@@ -131,13 +131,12 @@ function main() {
   const todos = readTodos();
   todos.forEach((todo) => {
     addTodo(todo.text, todo.checked, todo.date);
-    console.log(todo);
   });
 
   addBtn.addEventListener("click", () => {
     if (todoInput.value.trim() === "") return; // 빈 입력 방지
 
-    addTodo(todoInput.value);
+    addTodo(todoInput.text);
 
     readTodos(todoInput.value);
     todos.push({ text: todoInput.value, checked: false });
