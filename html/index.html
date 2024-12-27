@@ -11,44 +11,6 @@
     <link rel="stylesheet" href="../css/todo.css" />
   </head>
   <body>
-    <nav class="navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fuild">
-        <a href="#" class="navbar-brand">TODO List</a>
-      </div>
-    </nav>
-
-    <div class="modal" tabindex="-1" id="myModal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">수정</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <p>변경할 내용을 입력하세요.</p>
-            <input type="text" class="form-control" , id="updateText" />
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              취소
-            </button>
-            <button type="button" class="btn btn-primary" id="updateOK">
-              수정
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-6">
@@ -75,12 +37,17 @@
               id="todoInput"
               placeholder="할 일"
             />
-            <button class="btn btn-primary" id="addBtn">추가</button>
+            <button class="btn btn-primary" id="addBtn">
+              <img src="../image/plus.png" alt="Add" id="addIcon" />
+            </button>
           </div>
+
+          <!-- TODO 리스트 -->
           <ul class="list-group" id="todoList"></ul>
         </div>
       </div>
     </div>
+
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
       integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
